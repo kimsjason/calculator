@@ -111,7 +111,6 @@ function displayValues(value) {
             keepGoing = false;
         }
     }
-    console.log(operation)
 }
 
 function clearDisplay() {
@@ -149,15 +148,32 @@ buttons.forEach(button => button.addEventListener('click', () => {
 );
 
 decimal.addEventListener('click', () => {
-    operation.push('.');
+    let i = -1;
+    let keepGoing = true;
+    while (keepGoing) {
+        if (operation.length == -(i)) {
+            display.textContent = operation.slice(i + 1).join('');
+            keepGoing = false;
+        } else if (!isNaN(operation.slice(i)[0]) || (operation.slice(i)[0] == '.')) {
+            i--;
+            display.textContent = operation.slice(i + 1).join('');
+        } else if (operators.includes(operation.slice(i)[0])) {
+            display.textContent = operation.slice(i).join('');
+            keepGoing = false;
+        } else {
+            display.textContent = operation.slice(i + 1).join('');
+            keepGoing = false;
+        }
+    }
+
+    let number = display.textContent;
+    if (!number.includes('.')) {
+        operation.push('.');
+    }
     displayValues(operation.slice(1).join(''));
 });
 
 equals.addEventListener('click', () => {
-    if (operators.includes(operation.slice(-1)[0])) {
-        displayValues('ERROR');
-    }
-    
     let num1 = getNumber();
     let operator = getOperator();
     let num2 = getNumber();
