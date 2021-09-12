@@ -22,7 +22,7 @@ html, body, button {
     border-radius: 1em;
 }
 
-.buttons {
+.buttons-container {
     display: flex;
     flex: 1;
     flex-direction: column;
