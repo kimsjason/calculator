@@ -19,7 +19,6 @@ function operate(operator, num1, num2) {
     let result;
     switch (operator) {
         case '+':
-            console.log('adding...')
             result = add(num1, num2);
             break;
         case '-':
@@ -37,7 +36,7 @@ function operate(operator, num1, num2) {
 // GET FUNCTIONS
 function getNumber() {
     let number = '';
-    while (!isNaN(operation[0])) {
+    while (!isNaN(operation[0]) || (operation[0] == '.')) {
         number+=operation.shift();
     }
     return +number;
@@ -56,7 +55,7 @@ function pushNumber(number) {
     while (keepGoing) {
         if (operation.length == -(i)) {
             keepGoing = false;
-        } else if (!isNaN(operation.slice(i)[0])) {
+        } else if (!isNaN(operation.slice(i)[0]) || (operation.slice(i)[0] == '.')) {
             i--;
         } else {
             keepGoing = false;
@@ -94,6 +93,7 @@ let operation = ['0'];
 
 const display = document.querySelector('#display');
 const buttons = document.querySelectorAll('button');
+const decimal = document.querySelector('#decimal');
 const equals = document.querySelector('#equals-sign');
 const clear = document.querySelector('#clear');
 const backspace = document.querySelector('#backspace');
@@ -106,6 +106,11 @@ buttons.forEach(button => button.addEventListener('click', () => {
     }
 })
 );
+
+decimal.addEventListener('click', () => {
+    operation.push('.');
+    displayValues(operation.slice(1).join(''));
+});
 
 equals.addEventListener('click', () => {
     if (operators.includes(operation.slice(-1)[0])) {
@@ -128,6 +133,5 @@ equals.addEventListener('click', () => {
 });
 
 clear.addEventListener('click', () => clearDisplay());
-
 
 backspace.addEventListener('click', () => deleteEntry());
