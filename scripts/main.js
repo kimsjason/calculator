@@ -49,20 +49,7 @@ function getOperator() {
 // PUSH FUNCTIONS
 function pushNumber(number) {
     operation.push(number);
-    console.log(`operation: ${operation} number: ${number}`)
-    let i = -1;
-    let keepGoing = true;
-    while (keepGoing) {
-        if (operation.length == -(i)) {
-            keepGoing = false;
-        } else if (!isNaN(operation.slice(i)[0]) || (operation.slice(i)[0] == '.')) {
-            i--;
-        } else {
-            keepGoing = false;
-        }
-    }
-
-    displayValues(operation.slice(i + 1).join(''));
+    displayValues(operation);
 }
 
 function pushOperator(operator) {
@@ -71,11 +58,29 @@ function pushOperator(operator) {
     }
     
     operation.push(operator)
+    displayValues();
 }
 
 //DISPLAY FUNCTIONS
 function displayValues(value) {
-    display.textContent = value;
+    let i = -1;
+    let keepGoing = true;
+    while (keepGoing) {
+        if (operation.length == -(i)) {
+            display.textContent = operation.slice(i + 1).join('');
+            keepGoing = false;
+        } else if (!isNaN(operation.slice(i)[0]) || (operation.slice(i)[0] == '.')) {
+            i--;
+            display.textContent = operation.slice(i + 1).join('');
+        } else if (operators.includes(operation.slice(i)[0])) {
+            display.textContent = operation.slice(i).join('');
+            keepGoing = false;
+        } else {
+            display.textContent = operation.slice(i + 1).join('');
+            keepGoing = false;
+        }
+    }
+    console.log(`operation: ${operation}`)
 }
 
 function clearDisplay() {
@@ -84,8 +89,12 @@ function clearDisplay() {
  }
 
  function deleteEntry() {
-     operation.pop();
-     displayValues(operation.slice(1).join(''));
+     if (operation.length == 1) {
+         displayValues(operation);
+     } else if (operation.length > 1) {
+        operation.pop();
+        displayValues(operation);
+     }
  }
 
 const operators = ['+', '-', '•', '÷'];
@@ -99,7 +108,8 @@ const clear = document.querySelector('.clear');
 const backspace = document.querySelector('.backspace');
 
 buttons.forEach(button => button.addEventListener('click', () => {
-    if (button.className == 'number') {
+    button.get
+    if (button.classList.contains('number')) {
         pushNumber(button.textContent);
     } else if (button.className == 'operator') {
         pushOperator(button.textContent);
@@ -128,6 +138,7 @@ equals.addEventListener('click', () => {
         result = operate(operator, num1, num2)
     }
 
+    operation.push('0');
     operation.push(result);
     displayValues(result);
 });
