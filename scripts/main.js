@@ -91,12 +91,12 @@ function clearDisplay() {
 const operators = ['+', '-', '•', '÷'];
 let operation = ['0'];
 
-const display = document.querySelector('#display');
+const display = document.querySelector('.display');
 const buttons = document.querySelectorAll('button');
-const decimal = document.querySelector('#decimal');
-const equals = document.querySelector('#equals-sign');
-const clear = document.querySelector('#clear');
-const backspace = document.querySelector('#backspace');
+const decimal = document.querySelector('.decimal');
+const equals = document.querySelector('.equals-sign');
+const clear = document.querySelector('.clear');
+const backspace = document.querySelector('.backspace');
 
 buttons.forEach(button => button.addEventListener('click', () => {
     if (button.className == 'number') {
