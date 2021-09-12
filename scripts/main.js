@@ -15,6 +15,37 @@ function divide(num1, num2) {
     return num1 / num2;
 }
 
+function changeSign() {
+    let i = -1;
+    let keepGoing = true;
+    while (keepGoing) {
+        if (operation.length == -(i)) {
+            display.textContent = operation.slice(i + 1).join('');
+            keepGoing = false;
+        } else if (!isNaN(operation.slice(i)[0]) || (operation.slice(i)[0] == '.')) {
+            i--;
+            display.textContent = operation.slice(i + 1).join('');
+        } else if (operators.includes(operation.slice(i)[0])) {
+            display.textContent = operation.slice(i).join('');
+            keepGoing = false;
+        } else {
+            display.textContent = operation.slice(i + 1).join('');
+            keepGoing = false;
+        }
+    }
+
+    if (operation.slice(i)[0] == '+') {
+        console.log('hi!')
+        operation.splice(i, 1, '-');
+    } else if (operation.slice(i)[0] == '-') {
+        operation.splice(i, 1, '+');
+    } else if (operation.slice(i)[0] == '0') {
+        operation.splice(i + 1, 0, '-');
+    }
+
+    displayValues();
+}
+
 function operate(operator, num1, num2) {
     let result;
     switch (operator) {
@@ -80,7 +111,7 @@ function displayValues(value) {
             keepGoing = false;
         }
     }
-    console.log(`operation: ${operation}`)
+    console.log(operation)
 }
 
 function clearDisplay() {
@@ -106,9 +137,9 @@ const decimal = document.querySelector('.decimal');
 const equals = document.querySelector('.equals-sign');
 const clear = document.querySelector('.clear');
 const backspace = document.querySelector('.backspace');
+const posneg = document.querySelector('.positive-negative');
 
 buttons.forEach(button => button.addEventListener('click', () => {
-    button.get
     if (button.classList.contains('number')) {
         pushNumber(button.textContent);
     } else if (button.className == 'operator') {
@@ -146,3 +177,5 @@ equals.addEventListener('click', () => {
 clear.addEventListener('click', () => clearDisplay());
 
 backspace.addEventListener('click', () => deleteEntry());
+
+posneg.addEventListener('click', () => changeSign() );
