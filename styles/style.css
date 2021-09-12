@@ -9,6 +9,14 @@ html, body, button {
     height: 100%;
 }
 
+h1, h2 {
+    display: flex;
+    font-family: Roboto;
+    justify-content: center;
+}
+
+
+
 .container {
     display: flex;
     flex-direction: column;
@@ -17,7 +25,7 @@ html, body, button {
     min-height: 30em;
     max-height: 40em;
     margin: auto;
-    padding: 1% 1%;
+    padding: 0.5em 0.5em;
     background-color: #808080;
     border-radius: 1em;
 }
@@ -34,10 +42,11 @@ html, body, button {
     align-items: center;
     height: 3em;
     margin: 0.25em 0.25em;
-    padding: 5% 5%;
+    padding: 0.5em 0.5em;
     border-radius: 0.5em;
     background-color: #f0f0f0;
     font-size: 2em;
+    overflow: auto;
 }
 
 .row {
@@ -53,12 +62,25 @@ button {
     width: 100%;
     height: 100%;
     margin: 0.25em 0.25em;
-    padding: 1em 0.5em;
+    padding: 0.5em 0.5em;
     border: none;
     border-radius: 0.5em;
     font-family: inherit;
-    font-size: 1.5em;
-    background-color: white;
+    font-size: 2em;
+}
+
+.operator {
+    background-color: orange;
+}
+
+.clear, .backspace {
+    background-color: rgb(235, 94, 29);
+    color: white;
+}
+
+.number {
+    background-color: #3f3f3f;
+    color: white;
 }
 
 .zero {

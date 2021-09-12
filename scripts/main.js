@@ -55,7 +55,7 @@ function operate(operator, num1, num2) {
         case '-':
             result = subtract(num1, num2);
             break;
-        case '•':
+        case '×':
             result = multiply(num1, num2);
             break;
         case '÷':
@@ -127,7 +127,7 @@ function clearDisplay() {
      }
  }
 
-const operators = ['+', '-', '•', '÷'];
+const operators = ['+', '-', '×', '÷'];
 let operation = ['0'];
 
 const display = document.querySelector('.display');
