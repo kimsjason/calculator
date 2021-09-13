@@ -16,31 +16,18 @@ function divide(num1, num2) {
 }
 
 function changeSign() {
-    let i = -1;
-    let keepGoing = true;
-    while (keepGoing) {
-        if (operation.length == -(i)) {
-            display.textContent = operation.slice(i + 1).join('');
-            keepGoing = false;
-        } else if (!isNaN(operation.slice(i)[0]) || (operation.slice(i)[0] == '.')) {
-            i--;
-            display.textContent = operation.slice(i + 1).join('');
-        } else if (operators.includes(operation.slice(i)[0])) {
-            display.textContent = operation.slice(i).join('');
-            keepGoing = false;
-        } else {
-            display.textContent = operation.slice(i + 1).join('');
-            keepGoing = false;
-        }
-    }
+    let i = displayValues();
 
     if (operation.slice(i)[0] == '+') {
-        console.log('hi!')
         operation.splice(i, 1, '-');
     } else if (operation.slice(i)[0] == '-') {
         operation.splice(i, 1, '+');
     } else if (operation.slice(i)[0] == '0') {
+        operation.splice(i, 1, '-');
+    } else if (operation.slice(i)[0] == '×') {
         operation.splice(i + 1, 0, '-');
+    } else {
+        operation.splice(i, 0, '-');
     }
 
     displayValues();
@@ -67,18 +54,30 @@ function operate(operator, num1, num2) {
 // GET FUNCTIONS
 function getNumber() {
     let number = '';
+
+    if (operation[0] == '-') {
+        number+=operation.shift();
+    }
+    
     while (!isNaN(operation[0]) || (operation[0] == '.')) {
         number+=operation.shift();
     }
+
     return +number;
 }
 
 function getOperator() {
-    return operation.shift();
+    if (operators.includes(operation[0])) {
+        return operation.shift();
+    }
 }
 
 // PUSH FUNCTIONS
 function pushNumber(number) {
+    if (operation[0] == '0') {
+        operation.pop();
+    }
+
     operation.push(number);
     displayValues(operation);
 }
@@ -93,24 +92,25 @@ function pushOperator(operator) {
 }
 
 //DISPLAY FUNCTIONS
-function displayValues(value) {
+function displayValues() {
     let i = -1;
     let keepGoing = true;
     while (keepGoing) {
         if (operation.length == -(i)) {
-            display.textContent = operation.slice(i + 1).join('');
+            display.textContent = operation.slice(i).join('');
             keepGoing = false;
         } else if (!isNaN(operation.slice(i)[0]) || (operation.slice(i)[0] == '.')) {
             i--;
-            display.textContent = operation.slice(i + 1).join('');
+            display.textContent = operation.slice(i).join('');
         } else if (operators.includes(operation.slice(i)[0])) {
             display.textContent = operation.slice(i).join('');
             keepGoing = false;
         } else {
-            display.textContent = operation.slice(i + 1).join('');
+            display.textContent = operation.slice(i).join('');
             keepGoing = false;
         }
     }
+    return i;
 }
 
 function clearDisplay() {
@@ -120,10 +120,10 @@ function clearDisplay() {
 
  function deleteEntry() {
      if (operation.length == 1) {
-         displayValues(operation);
+         displayValues();
      } else if (operation.length > 1) {
         operation.pop();
-        displayValues(operation);
+        displayValues();
      }
  }
 
@@ -148,46 +148,43 @@ buttons.forEach(button => button.addEventListener('click', () => {
 );
 
 decimal.addEventListener('click', () => {
-    let i = -1;
-    let keepGoing = true;
-    while (keepGoing) {
-        if (operation.length == -(i)) {
-            display.textContent = operation.slice(i + 1).join('');
-            keepGoing = false;
-        } else if (!isNaN(operation.slice(i)[0]) || (operation.slice(i)[0] == '.')) {
-            i--;
-            display.textContent = operation.slice(i + 1).join('');
-        } else if (operators.includes(operation.slice(i)[0])) {
-            display.textContent = operation.slice(i).join('');
-            keepGoing = false;
-        } else {
-            display.textContent = operation.slice(i + 1).join('');
-            keepGoing = false;
-        }
-    }
+    let i = displayValues();
 
     let number = display.textContent;
     if (!number.includes('.')) {
         operation.push('.');
     }
-    displayValues(operation.slice(1).join(''));
+    displayValues();
 });
 
 equals.addEventListener('click', () => {
     let num1 = getNumber();
     let operator = getOperator();
-    let num2 = getNumber();
-    let result = operate(operator, num1, num2);
-    while (operation.length) {
-        num1 = result;
-        operator = getOperator();
-        num2 = getNumber();
-        result = operate(operator, num1, num2)
+    /* evaluate operation if ordered correctly
+    if user doesn't enter an operator, display the first number*/
+    if (operator) {
+        let num2 = getNumber();
+        let result = operate(operator, num1, num2);
+        while (operation.length) {
+            num1 = result;
+            operator = getOperator();
+            num2 = getNumber();
+            result = operate(operator, num1, num2);            
+        }
+        // need to separate negative sign from numeric value and push back to array
+        // in case user continues calculations
+        if (result < 0) {
+            operation.push('-');
+            operation.push(-result)
+        } else {
+            operation.push(result);
+        }
+        
+        displayValues();
+        
+    } else {
+        operation.push(num1);
     }
-
-    operation.push('0');
-    operation.push(result);
-    displayValues(result);
 });
 
 clear.addEventListener('click', () => clearDisplay());
